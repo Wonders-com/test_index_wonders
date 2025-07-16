@@ -108,7 +108,7 @@
       if (!historyVisible) toggleHistory();
 
       try {
-        const response = await fetch("https://wonders-ai.resource-a2e.workers.dev/", {
+        const response = await fetch("https://wonders-ai-test.resource-a2e.workers.dev/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question: questionText })
