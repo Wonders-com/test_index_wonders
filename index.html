@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wonders AI 問答平台</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fefefe;
+      color: #333;
+    }
+    h1 {
+      color: #222;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .qa-container {
+      margin-top: 20px;
+      display: none; /* 預設隱藏 */
+    }
+    .question, .answer {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+    .question {
+      background-color: #e1f5fe;
+    }
+    .answer {
+      background-color: #f1f8e9;
+    }
+    .toggle-btn {
+      background-color: #2196F3;
+      margin-top: 20px;
+    }
+    .toggle-btn:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wondes AI 問答平台</h1>
+
+  <label for="question">請輸入問題：</label><br/>
+  <textarea id="question" placeholder="例如：益生菌有什麼功效？"></textarea><br/>
+  <button onclick="askQuestion()">送出</button>
+  <button class="toggle-btn" onclick="toggleHistory()">顯示對話紀錄</button>
+
+  <div id="qa-list" class="qa-container"></div>
+
+  <script>
+    let historyVisible = false;
+
+    function toggleHistory() {
+      const qaContainer = document.getElementById("qa-list");
+      const toggleBtn = document.querySelector(".toggle-btn");
+
+      historyVisible = !historyVisible;
+      qaContainer.style.display = historyVisible ? "block" : "none";
+      toggleBtn.textContent = historyVisible ? "隱藏對話紀錄" : "顯示對話紀錄";
+    }
+
+    async function askQuestion() {
+      const questionText = document.getElementById("question").value.trim();
+      if (!questionText) return;
+
+      const qaList = document.getElementById("qa-list");
+
+      // 顯示使用者提問
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "question";
+      questionDiv.textContent = "👤 使用者提問：" + questionText;
+      qaList.appendChild(questionDiv);
+
+      // 顯示等待回覆
+      const answerDiv = document.createElement("div");
+      answerDiv.className = "answer";
+      answerDiv.textContent = "⌛ 請稍候...";
+      qaList.appendChild(answerDiv);
+
+      // 自動展開對話區
+      if (!historyVisible) toggleHistory();
+
+      try {
+        const response = await fetch("https://wonders-ai.resource-a2e.workers.dev/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: questionText })
+        });
+
+        const data = await response.json();
+        answerDiv.textContent = "🤖 Gemini 回答：" + (data.answer || "⚠️ 無回應，請稍後再試。");
+
+        // 可加上本地保存紀錄功能（如 localStorage）後續擴充
+      } catch (error) {
+        answerDiv.textContent = "❌ 發生錯誤：" + error.message;
+      }
+
+      document.getElementById("question").value = "";
+    }
+  </script>
+</body>
+</html>
