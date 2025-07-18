@@ -1,4 +1,4 @@
-##開發者筆記##
+## 開發者筆記 ##
 
 這是一個結合 cloudflare(D1), gemini, github page 來實現的互動機器人。  
 
