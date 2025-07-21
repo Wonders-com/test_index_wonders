@@ -36,3 +36,6 @@ jobs:
           git add knowledge/ index.json
           git commit -m "自動轉檔與索引更新" || echo "Nothing to commit"
           git push
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
