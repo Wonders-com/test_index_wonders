@@ -28,18 +28,22 @@ if not pdf_files:
 else:
     for pdf_file in pdf_files:
         pdf_path = os.path.join(PDF_DIR, pdf_file)
+        md_filename = os.path.splitext(pdf_file)[0] + ".md"
+        md_path = os.path.join(MD_OUTPUT_DIR, md_filename)
+
+        # 跳過已轉換的 PDF
+        if os.path.exists(md_path):
+            print(f"⏭️ 已存在，略過：{md_filename}")
+            continue
+
         content = extract_text_from_pdf_pypdf2(pdf_path)
 
         if content:
-            md_filename = os.path.splitext(pdf_file)[0] + ".md"
-            md_path = os.path.join(MD_OUTPUT_DIR, md_filename)
-
             with open(md_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-
             print(f"✅ 已轉換：{pdf_file} ➝ {md_filename}")
         else:
-            print(f"⚠️ 未能提取內容：{pdf_file}")
+            print(f"⚠️ 無法提取內容：{pdf_file}")
 
 # 使用範例：
 # 請將 'your_document.pdf' 替換為您實際的 PDF 檔案路徑

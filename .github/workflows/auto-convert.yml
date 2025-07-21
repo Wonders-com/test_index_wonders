@@ -1,0 +1,38 @@
+name: Auto PDF to Markdown + Generate Index
+
+on:
+  push:
+    paths:
+      - 'pdfs/**/*.pdf'      # 當 pdfs/ 資料夾中有新的 PDF 被 push
+      - 'tools/pdf_to_md.py'
+      - 'tools/generate_index.py'
+
+jobs:
+  convert_and_index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install PyPDF2
+
+      - name: Run pdf_to_md.py
+        run: python tools/pdf_to_md.py
+
+      - name: Run generate_index.py
+        run: python tools/generate_index.py
+
+      - name: Commit and push results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add knowledge/ index.json
+          git commit -m "自動轉檔與索引更新" || echo "Nothing to commit"
+          git push
