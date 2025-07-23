@@ -1,17 +1,21 @@
-name: Auto PDF to Markdown + Generate Index
+name: Auto Convert Documents and Update Index 
 
 on:
   push:
+    branches:
+      - main 
     paths:
-      - 'pdfs/**'      # 當 pdfs/ 資料夾中有新的 PDF 被 push
-      - 'tools/**'
+      - 'original_file/pdfs/**' # 監聽 PDF 路徑
+      - 'csvs/**'               # 監聽 CSV 路徑
+      - 'tools/**'              # 監聽工具程式碼的變動
+  workflow_dispatch: # 允許手動觸發此工作流
 
 jobs:
-  convert_and_index:
+  convert_and_index: 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -20,23 +24,28 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run:  |
+        run: |
           python -m pip install --upgrade pip
-          pip install PyPDF2
+          pip install PyPDF2 pandas 
 
-      - name: Run pdf_to_md.py
+      - name: Convert PDFs to Markdown
         run: python tools/pdf_to_md.py
+        
+
+      - name: Convert CSVs to Markdown 
+        run: python tools/csv_to_md.py
+        
 
       - name: Run generate_index.py
         run: python tools/generate_index.py
+        # generate_index.py 需要掃描所有 Markdown 檔案，所以放在兩個轉換步驟之後
 
       - name: Commit and push results
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "自動轉檔與索引更新" || echo "Nothing to commit"
+          git add . 
+          git commit -m "自動轉檔與索引更新 (PDFs & CSVs)" || echo "Nothing to commit" 
           git push
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

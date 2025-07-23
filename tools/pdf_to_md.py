@@ -2,8 +2,8 @@ import os
 import PyPDF2
 
 # PDF 來源與 .md 輸出位置（可自訂分類）
-PDF_DIR = "pdfs"
-MD_OUTPUT_DIR = "knowledge/law"  # 預設全部放進 law 類別
+PDF_DIR = "original_file/pdfs"
+MD_OUTPUT_DIR = "knowledge/law"
 
 # 確保輸出資料夾存在
 os.makedirs(MD_OUTPUT_DIR, exist_ok=True)
