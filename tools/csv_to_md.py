@@ -71,7 +71,7 @@ def convert_csv_to_md(csv_file_path: str, output_dir: str,
     output_path.mkdir(parents=True, exist_ok=True)
     
     # 輸出檔案路徑與檔名
-    output_file = output_path / f"{csv_path.stem}.md"
+    output_file = output_path / f"{csv_path.stem}_威德.md"
     
     try:
         # 寫入檔案
