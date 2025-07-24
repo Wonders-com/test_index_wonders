@@ -21,13 +21,8 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
             parts = relative_path.split("/")
             category = parts[1] if len(parts) >= 3 else "unknown"
 
-            # 標題優先用第一行 markdown 標題，否則用檔名
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    first_line = f.readline().strip().lstrip("#").strip()
-                    title = first_line if first_line else os.path.splitext(file)[0]
-            except:
-                title = os.path.splitext(file)[0]
+            # 標題優先用檔名
+            title = os.path.splitext(file)[0]
 
             # 建立 raw URL 連結
             raw_url = f"{GITHUB_RAW_BASE}/{urllib.parse.quote(relative_path)}"
