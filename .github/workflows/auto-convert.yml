@@ -6,7 +6,7 @@ on:
       - main 
     paths:
       - 'original_file/pdfs/**' # 監聽 PDF 路徑
-      - 'csvs/**'               # 監聽 CSV 路徑
+      - 'original_file/csvs/**' # 監聽 CSV 路徑
       - 'tools/**'              # 監聽工具程式碼的變動
   workflow_dispatch: # 允許手動觸發此工作流
 
