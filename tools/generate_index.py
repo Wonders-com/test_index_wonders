@@ -13,6 +13,7 @@ GITHUB_RAW_BASE = "https://raw.githubusercontent.com/Wonders-com/test_index_wond
 PRODUCT_FOLDER_TO_NAME_MAP = {
     "product_weider_probiotic": "威德益生菌",
     "product_cranberry_probiotic": "威德蔓越莓益生菌",
+    "product_other_unmatch":"無法識別產品",
     # 範例：如果未來有新產品
     # "product_xyz_vitamin": "XYZ綜合維他命",
     
@@ -29,15 +30,19 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
 
             # 分類，例如 knowledge/law/xxx.md → law
             parts = relative_path.split("/")
-            category = parts[1] if len(parts) >= 3 else "unknown"
+            category = "unknown"
 
             product_name = "未知產品" # 預設值
 
-            # 根據資料夾名稱來推斷產品名稱
-            # 這裡假設你的產品知識文件都放在 knowledge/product_xxx_productname/ 下
-            if category.startswith("product_"):
-                # 從映射中查找對應的中文產品名稱
-                product_name = PRODUCT_FOLDER_TO_NAME_MAP.get(category, "未知產品")
+            # 根據路徑深度和命名慣例來判斷 category 和 product_name
+            if len(parts) >= 2: # 至少 knowledge/something
+                if parts[1] == "product" and len(parts) >= 3: # knowledge/product/product_xxx
+                    category = parts[2] # 新的 category 是 product_xxx_productname
+                    # 從映射中查找對應的中文產品名稱
+                    product_name = PRODUCT_FOLDER_TO_NAME_MAP.get(category, "未知產品")
+                elif parts[1] != "product": # knowledge/law 或者其他頂層分類
+                    category = parts[1] # 保持原來的 category 提取方式
+                    # 非產品類別的 product_name 可以保持預設或設定為 None
 
             # 標題優先用第一行 markdown 標題，否則用檔名
             try:
@@ -47,8 +52,6 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
             except Exception: # 捕獲所有異常，避免文件讀取問題導致腳本停止
                 title = os.path.splitext(file)[0]
 
-            # 建立 raw URL 連結
-            # 注意：這裡使用了 urllib.parse.quote 對路徑進行 URL 編碼，確保特殊字元處理正確
             raw_url = f"{GITHUB_RAW_BASE}/{urllib.parse.quote(relative_path)}"
 
             # 最後更新時間
@@ -59,7 +62,7 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
                 "file": relative_path,
                 "url": raw_url,
                 "category": category,
-                "product_name": product_name, # <-- 新增的產品名稱欄位
+                "product_name": product_name,
                 "updated": updated
             })
 

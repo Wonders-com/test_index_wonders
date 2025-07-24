@@ -33,7 +33,7 @@ def get_product_folder(csv_filename: str) -> str:
     
     # 如果無法識別，使用預設資料夾
     logger.warning(f"無法識別產品類型，使用預設資料夾: {csv_filename}")
-    return "product_csv_data"
+    return "product_other_unmatch"
 
 def convert_csv_to_md(csv_file_path: str, base_output_dir: str, 
                       fill_na: bool = True, encoding: str = 'utf-8') -> bool:
@@ -57,7 +57,7 @@ def convert_csv_to_md(csv_file_path: str, base_output_dir: str,
     
     # 根據檔名決定輸出資料夾
     product_folder = get_product_folder(csv_path.name)
-    output_dir = Path(base_output_dir) / product_folder
+    output_dir = Path(base_output_dir) / "product" / product_folder
     
     try:
         # 讀取 CSV，優先使用指定編碼
@@ -195,7 +195,7 @@ def main():
     logger.info(f"輸出基礎目錄: {base_output_dir}")
     logger.info("產品資料夾映射:")
     for product, folder in PRODUCT_FOLDER_MAP.items():
-        logger.info(f"  {product} -> {base_output_dir}{folder}/")
+        logger.info(f"  {product} -> {base_output_dir}product/{folder}/")
     
     # 執行批次轉換
     results = batch_convert_csv_to_md(csv_input_dir, base_output_dir)
