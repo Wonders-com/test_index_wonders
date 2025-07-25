@@ -40,6 +40,9 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
                     category = parts[2] # 新的 category 是 product_xxx_productname
                     # 從映射中查找對應的中文產品名稱
                     product_name = PRODUCT_FOLDER_TO_NAME_MAP.get(category, "未知產品")
+                elif parts[1] == "law": # 如果 category 是 "law"
+                    category = parts[1] # 設定 category 為 law
+                    product_name = "法規" # productName 顯示為 "法規"
                 elif parts[1] != "product": # knowledge/law 或者其他頂層分類
                     category = parts[1] # 保持原來的 category 提取方式
                     # 非產品類別的 product_name 可以保持預設或設定為 None
