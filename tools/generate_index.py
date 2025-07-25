@@ -20,6 +20,7 @@ PRODUCT_FOLDER_TO_NAME_MAP = {
 }
 
 index_list = []
+law = str("law")  # 將 law 設定為 "law"，用於分類
 
 # 遍歷資料夾
 for root, dirs, files in os.walk(KNOWLEDGE_DIR):
@@ -40,8 +41,8 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
                     category = parts[2] # 新的 category 是 product_xxx_productname
                     # 從映射中查找對應的中文產品名稱
                     product_name = PRODUCT_FOLDER_TO_NAME_MAP.get(category, "未知產品")
-                elif parts[1] == "law_CK": # 如果 category 是 "law"
-                    category = parts[1] # 設定 category 為 law
+                elif parts[1] == "law_CK": # 如果 category 是 "law_CK"
+                    category = law # 設定 category 為 law
                     product_name = "法規" # productName 顯示為 "法規"
                 elif parts[1] != "product": # knowledge/law 或者其他頂層分類
                     category = parts[1] # 保持原來的 category 提取方式
