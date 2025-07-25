@@ -4,7 +4,7 @@ from datetime import datetime
 import urllib.parse
 
 # 設定路徑
-KNOWLEDGE_DIR = "knowledge"              # 放 .md 的資料夾
+KNOWLEDGE_DIR = "knowledge_chunks/law_CK"              # 放 .md 的資料夾
 OUTPUT_FILE = "index.json"               # 產出的索引檔
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/Wonders-com/test_index_wonders/main"
 
@@ -40,7 +40,7 @@ for root, dirs, files in os.walk(KNOWLEDGE_DIR):
                     category = parts[2] # 新的 category 是 product_xxx_productname
                     # 從映射中查找對應的中文產品名稱
                     product_name = PRODUCT_FOLDER_TO_NAME_MAP.get(category, "未知產品")
-                elif parts[1] == "law": # 如果 category 是 "law"
+                elif parts[1] == "law_CK": # 如果 category 是 "law"
                     category = parts[1] # 設定 category 為 law
                     product_name = "法規" # productName 顯示為 "法規"
                 elif parts[1] != "product": # knowledge/law 或者其他頂層分類

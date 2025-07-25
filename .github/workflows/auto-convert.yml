@@ -1,4 +1,4 @@
-name: Auto Convert Documents and Update Index 
+name: Auto Convert Documents & Chunk_Mdand & Update Index 
 
 on:
   push:
